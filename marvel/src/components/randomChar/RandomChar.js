@@ -10,7 +10,7 @@ import mjolnir from '../../resources/img/mjolnir.png';
 class RandomChar extends Component {
     constructor(props){
         super(props);
-        this.updateChar();
+        console.log('конструктор');
     }
 
     marvelService = new MarvelService();
@@ -19,6 +19,16 @@ class RandomChar extends Component {
         char: {},
         loading: true,
         error: false
+    }
+    componentDidMount(){
+        console.log('вызов2  mount');
+        this.updateChar();
+        this.timerId = setInterval(this.updateChar, 5000000);
+    }
+
+    componentWillUnmount(){
+        console.log('вызов2  unmount');
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
@@ -33,6 +43,7 @@ class RandomChar extends Component {
     }
 
     updateChar = () =>{
+        console.log('update');
         const id = Math.floor(Math.random()*(1011400 - 1011000) + 1011000)
         this.marvelService
             .getCharacter(id)
@@ -40,7 +51,15 @@ class RandomChar extends Component {
             .catch(this.onError)
     };
 
+    onRandomChar = () => {
+        console.log('вызов');
+        this.updateChar();
+        clearInterval(this.timerId);
+        this.timerId = setInterval(this.updateChar, 5000000);
+    }
+
     render(){
+        console.log('render');
         const {char, loading, error} = this.state;
         const errorMessage = error? <ErrorMessage/>: null;
         const load = loading? <Spinner/> : null;
@@ -59,7 +78,7 @@ class RandomChar extends Component {
                     <p className="randomchar__title">
                         Or choose another one
                     </p>
-                    <button className="button button__main">
+                    <button onClick = {this.onRandomChar} className="button button__main">
                         <div className="inner">try it</div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
@@ -73,9 +92,13 @@ class RandomChar extends Component {
 
 const View = ({char}) =>{
     const {thumbnail, name, description, homepage, wiki} = char;
+    let imgStyle = {'objectFit' : 'cover'};;
+    if (thumbnail.indexOf('image_not_available') != -1){
+        imgStyle = {'objectFit' : 'contain'};
+    }
     return (
         <div className="randomchar__block">
-                    <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+                    <img src={thumbnail} alt="Random character" className="randomchar__img" style = {imgStyle}/>
                     <div className="randomchar__info">
                     <p className="randomchar__name">{name}</p>
                         <p className="randomchar__descr">
