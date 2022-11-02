@@ -5,40 +5,59 @@ import Spinner from '../spinner/Spinner'
 //import App from '../app/App'
 
 import './charList.scss';
-import abyss from '../../resources/img/abyss.jpg';
 
 
 
 class CharList extends Component {
 
+
     state = {
         charList: [],
         loading: true,
-        error: false
+        error: false,
+        newItemLoading: false,
+        offset: 1550,
+        ended: false
     }
     
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.marvelService.getAllCharacters()
+        this.onRequest();
+    }
+
+
+    onRequest = (offset) => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset)
             .then(this.onCharListLoaded)
             .catch(this.onError)
     }
 
-    onCharListLoaded = (charList) => {
-        this.setState({
-            charList,
-            loading: false
-        })
+    onCharListLoading = () =>{
+        console.log('HI');
+        this.setState({newItemLoading:true});
+    }
+
+    onCharListLoaded = (newCharList) => {
+        let isEnd = false;
+        if(newCharList.length < 9)
+            isEnd = true
+        this.setState(({charList, offset}) => ({
+            charList: [...charList, ...newCharList],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            ended: isEnd
+        }))
     }
 
     onError = () => {
         this.setState({
             error: true,
-            loading: false
+            loading: false,
         })
     }
-
 
     renderItems(arr) {
         const items =  arr.map((item) => {
@@ -63,11 +82,11 @@ class CharList extends Component {
                 {items}
             </ul>
         )
-    }
+    };
 
     render() {
 
-        const {charList, loading, error} = this.state;
+        const {charList, loading, error, newItemLoading, offset, ended} = this.state;
         
         const items = this.renderItems(charList);
 
@@ -80,7 +99,10 @@ class CharList extends Component {
                 {errorMessage}
                 {spinner}
                 {content}
-                <button className="button button__main button__long">
+                <button className="button button__main button__long"
+                disabled = {newItemLoading}
+                onClick={()=>{this.onRequest(offset)}}
+                style = {{'display': ended ? 'none':'block'}}>
                     <div className="inner">load more</div>
                 </button>
             </div>

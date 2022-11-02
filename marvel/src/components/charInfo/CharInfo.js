@@ -19,6 +19,7 @@ class CharInfo extends Component {
 
     componentDidMount() {
         this.updateChar();
+        //this.props.foo;
     }
 
     componentDidUpdate(prevProps){
