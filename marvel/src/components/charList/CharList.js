@@ -27,6 +27,7 @@ class CharList extends Component {
         this.onRequest();
     }
 
+    
 
     onRequest = (offset) => {
         this.onCharListLoading();
@@ -36,7 +37,6 @@ class CharList extends Component {
     }
 
     onCharListLoading = () =>{
-        console.log('HI');
         this.setState({newItemLoading:true});
     }
 
@@ -66,10 +66,10 @@ class CharList extends Component {
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
             }
-            
+            let classItem = (this.props.selectedId === item.id)? "char__item char__item_selected":"char__item";
             return (
                 <li 
-                    className="char__item"
+                    className= {classItem}
                     key={item.id}
                     onClick={() => this.props.onCharSelected(item.id)}>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>

@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "prop-types": "^15.8.1",
-    "sass": "^1.55.0"
+    "sass": "^1.56.0"
   }
 }

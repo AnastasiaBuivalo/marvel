@@ -19,6 +19,7 @@ class App extends Component {
         })
     }
 
+
     render() {
         return (
             <div className="app">
@@ -29,7 +30,7 @@ class App extends Component {
                     </ErrorBoundary>
                     <div className="char__content">
                         <ErrorBoundary>
-                            <CharList onCharSelected={this.onCharSelected} />
+                            <CharList onCharSelected={this.onCharSelected} selectedId = {this.state.selectedChar}/>
                         </ErrorBoundary>
                         <ErrorBoundary>
                             <CharInfo charId={this.state.selectedChar}/>
