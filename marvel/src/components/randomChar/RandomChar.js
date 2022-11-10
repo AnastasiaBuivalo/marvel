@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef} from 'react';
-import MarvelService from '../../services/MarvelService'
+import useMarvelService from '../../services/MarvelService'
 import ErrorMessage from '../errorMessage/ErrorMessage'
 import Spinner from '../spinner/Spinner'
 
@@ -10,9 +10,9 @@ import mjolnir from '../../resources/img/mjolnir.png';
 const RandomChar = (props)=> {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(false);
+    const {loading, error, getCharacter, clearError}= useMarvelService();
 
     useEffect(()=>{
         console.log('вызов2  mount');
@@ -21,37 +21,33 @@ const RandomChar = (props)=> {
     }, []);
 
 
-    const onCharLoading = () => {
-        setLoading(true);
-    }
+    // const onCharLoading = () => {
+    //     setLoading(true);
+    // }
 
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
+        //setLoading(false);
     }
 
-    const onError = () => {
-        setLoading(false);
-        setError(true);
-    }
+    // const onError = () => {
+    //     setLoading(false);
+    //     setError(true);
+    // }
 
     const updateChar = () =>{
         console.log('update');
         const id = Math.floor(Math.random()*(1011400 - 1011000) + 1011000);
-        onCharLoading();
-        marvelService
-            .getCharacter(id)
+        //onCharLoading();
+        clearError();
+        getCharacter(id)
             .then(onCharLoaded)
-            .catch(onError)
+            //.catch(onError)
     };
     
     const timerRef = useRef(setInterval(updateChar, 5000000));
 
     //const timer = setInterval(updateChar, 5000000);
-    const marvelService = new MarvelService();
-
-
-
 
 
    const onRandomChar = () => {
@@ -94,7 +90,7 @@ const RandomChar = (props)=> {
 const View = ({char}) =>{
     const {thumbnail, name, description, homepage, wiki} = char;
     let imgStyle = {'objectFit' : 'cover'};;
-    if (thumbnail.indexOf('image_not_available') !== -1){
+    if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         imgStyle = {'objectFit' : 'contain'};
     }
     return (
