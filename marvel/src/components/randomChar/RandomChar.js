@@ -10,8 +10,6 @@ import mjolnir from '../../resources/img/mjolnir.png';
 const RandomChar = (props)=> {
 
     const [char, setChar] = useState({});
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(false);
     const {loading, error, getCharacter, clearError}= useMarvelService();
 
     useEffect(()=>{
@@ -21,33 +19,20 @@ const RandomChar = (props)=> {
     }, []);
 
 
-    // const onCharLoading = () => {
-    //     setLoading(true);
-    // }
-
     const onCharLoaded = (char) => {
         setChar(char);
-        //setLoading(false);
     }
-
-    // const onError = () => {
-    //     setLoading(false);
-    //     setError(true);
-    // }
 
     const updateChar = () =>{
         console.log('update');
         const id = Math.floor(Math.random()*(1011400 - 1011000) + 1011000);
-        //onCharLoading();
         clearError();
         getCharacter(id)
             .then(onCharLoaded)
-            //.catch(onError)
     };
     
     const timerRef = useRef(setInterval(updateChar, 5000000));
 
-    //const timer = setInterval(updateChar, 5000000);
 
 
    const onRandomChar = () => {
@@ -55,7 +40,6 @@ const RandomChar = (props)=> {
         updateChar();
         clearInterval(timerRef?.current);
         timerRef.current = setInterval(updateChar, 5000000);
-        //timer= setInterval(updateChar, 5000000);
     }
 
     console.log('render');
