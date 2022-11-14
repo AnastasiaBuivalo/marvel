@@ -1,37 +1,33 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom"; 
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; 
 import AppHeader from "../appHeader/AppHeader";
-import MainPage from "../pages/MainPage";
-import ComicsPage from "../pages/ComicsPage";
+import Spinner from "../spinner/Spinner";
 
+import {lazy, Suspense} from "react"
 
-import decoration from '../../resources/img/vision.png';
+const Page404 = lazy(()=>import('../pages/404'));
+const MainPage = lazy(()=>import('../pages/MainPage'));
+const ComicsPage = lazy(()=>import('../pages/ComicsPage'));
+const SingleComicPage = lazy(()=>import('../pages/SingleComicPage'));
 
 const App = ()=> {
-    const [selectedChar, setSelectedChar] = useState(null);
-    const [selectedComics, setSelectedComics] = useState(null);
-
-    const onComicsSelected = (id) =>{
-        setSelectedComics(id);
-    }
-
-    const onCharSelected = (id) => {
-        setSelectedChar(id);
-    }
 
     return (
-        <Router>
+         <Router>
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <Route exact path = "/" >
-                        <MainPage/>
-                    </Route>
-                    <Route exact path = "/comics" >
-                        <ComicsPage/>
-                    </Route>
-                </main>
-            </div>
+                    <Suspense fallback = {<Spinner/>}>
+                        <Switch>
+                            <Route exact path = "/" component={MainPage} />
+                            <Route exact path = "/comics" component={ComicsPage}/>
+                            <Route exact path="/comics/:comicId" component={SingleComicPage}/>
+                            <Route path="*">
+                                <Page404/>
+                            </Route>
+                        </Switch>
+                    </Suspense>
+                 </main> 
+             </div>
         </Router>
        
     )

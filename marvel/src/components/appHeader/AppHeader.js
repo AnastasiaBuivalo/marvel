@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import './appHeader.scss';
 
+// end style={({isActive})=>({color: isActive? '#9f0013': 'inherit'})}
+//end style={({isActive})=>({})}
 const AppHeader = () => {
     return (
         <header className="app__header">
@@ -18,7 +20,7 @@ const AppHeader = () => {
 
                     /
                     <li>
-                        <NavLink to= "/comics" exact activeStyle={{'color':'#9f0013'}}>Comics
+                        <NavLink to= "/comics" activeStyle={{'color':'#9f0013'}}>Comics
                         </NavLink>
                     </li>
                 </ul>

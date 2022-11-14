@@ -17,7 +17,10 @@ const CharList = (props)=>{
     const [ended, setEnded] = useState(false);
 
     const {loading, error, getAllCharacters} = useMarvelService();
-    useEffect(()=>onRequest(offset, true),[]);
+    useEffect(() => {
+        onRequest(offset, true);},
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+         []);
 
 
     const onRequest = (offset, initial) => {
@@ -69,6 +72,11 @@ const CharList = (props)=>{
 
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading && !newItemLoading ? <Spinner/> : null;
+    if(loading){
+        import('./SomeFunc')
+        .then(obj=>obj.logger())
+        .catch(console.log('о,шибка'))
+    }
     //const content = !(loading || error) ? items : null;
 
     return (
